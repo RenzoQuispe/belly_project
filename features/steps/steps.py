@@ -1,4 +1,4 @@
-from behave import given, when, then
+from behave import given, when, then, register_type
 import re
 
 # Función para convertir palabras numéricas a números
@@ -45,9 +45,20 @@ def parsear_descripcion_tiempo(descripcion):
     else:
         raise ValueError(f"No se pudo interpretar la descripción del tiempo: {descripcion}")
 
+# Registrar tipo flotante para el paso
+def parse_float(text):
+    try:
+        value = float(text)
+        if value < 0:
+            raise ValueError("No puedes comer una cantidad negativa de pepinos.")
+        return value
+    except ValueError:
+        raise ValueError(f"No se puede convertir '{text}' a Numero Decimal.")
+
+register_type(float=parse_float)
 
 # Steps
-@given('que he comido {cukes:d} pepinos')
+@given('que he comido {cukes:float} pepinos')
 def step_given_eaten_cukes(context, cukes):
     context.belly.comer(cukes)
 

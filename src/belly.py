@@ -1,10 +1,12 @@
 class Belly:
     def __init__(self):
-        self.pepinos_comidos = 0
+        self.pepinos_comidos = 0.0
         self.tiempo_esperado = 0
 
     def comer(self, pepinos):
-        self.pepinos_comidos += pepinos
+        if pepinos < 0:
+            raise ValueError("No puedes comer una cantidad negativa de pepinos.")
+        self.pepinos_comidos += float(pepinos)
 
     def esperar(self, tiempo_en_horas):
         self.tiempo_esperado += tiempo_en_horas
