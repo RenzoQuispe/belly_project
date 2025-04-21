@@ -29,7 +29,12 @@ jobs:
           source act9/bin/activate
           pytest tests/
 
-      - name: Run behave
+      - name: Run behave - español tests
         run: |
           source act9/bin/activate
-          behave features/
+          behave --tags=@español
+
+      - name: Run behave - ingles tests
+        run: |
+          source act9/bin/activate
+          behave --tags=@ingles

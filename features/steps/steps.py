@@ -7,12 +7,19 @@ def convertir_palabra_a_numero(palabra):
         return int(palabra)
     except ValueError:
         numeros = {
+            # Español
             "cero": 0, "uno": 1, "una": 1, "dos": 2, "tres": 3, "cuatro": 4, "cinco": 5,
             "seis": 6, "siete": 7, "ocho": 8, "nueve": 9, "diez": 10, "once": 11,
             "doce": 12, "trece": 13, "catorce": 14, "quince": 15, "dieciséis": 16,
             "diecisiete": 17, "dieciocho": 18, "diecinueve": 19, "veinte": 20,
             "treinta": 30, "cuarenta": 40, "cincuenta": 50, "sesenta": 60, "setenta": 70,
-            "ochenta": 80, "noventa": 90, "media": 0.5
+            "ochenta": 80, "noventa": 90, "media": 0.5,
+            # Inglés
+            "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+            "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11,
+            "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+            "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19,
+            "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "half": 0.5
         }
         return numeros.get(palabra.lower(), 0)
 
@@ -22,13 +29,13 @@ def parsear_descripcion_tiempo(descripcion):
     descripcion = descripcion.replace('y', ' ')
     descripcion = descripcion.strip()
 
-    if descripcion == 'media hora':
+    if descripcion in ['media hora', 'half hour']:
         return 0.5
 
     pattern = re.compile(
-        r'(?:(\w+|\d+(?:\.\d+)?)\s*horas?)?\s*'
-        r'(?:(\w+|\d+(?:\.\d+)?)\s*minutos?)?\s*'
-        r'(?:(\w+|\d+(?:\.\d+)?)\s*segundos?)?'
+        r'(?:(\w+|\d+(?:\.\d+)?)\s*(?:horas?|hours?))?\s*'
+        r'(?:(\w+|\d+(?:\.\d+)?)\s*(?:minutos?|minutes?))?\s*'
+        r'(?:(\w+|\d+(?:\.\d+)?)\s*(?:segundos?|seconds?))?'
     )
     match = pattern.match(descripcion)
 
@@ -49,11 +56,13 @@ def parsear_descripcion_tiempo(descripcion):
 def parse_float(text):
     try:
         value = float(text)
-        if value < 0:
-            raise ValueError("No puedes comer una cantidad negativa de pepinos.")
-        return value
     except ValueError:
         raise ValueError(f"No se puede convertir '{text}' a Numero Decimal.")
+    
+    if value < 0:
+        raise ValueError("No puedes comer una cantidad negativa de pepinos.")
+    
+    return value
 
 register_type(float=parse_float)
 

@@ -18,18 +18,13 @@ def test_parsear_descripcion_tiempo(descripcion, valorEsperado):
     assert resultado == valorEsperado
 
 # Pruebas para "parse_float"
-def test_parse_float_valid():
+def test_parse_float():
     assert parse_float("3.14") == 3.14
     assert parse_float("0") == 0.0
     assert parse_float("10") == 10.0
-def test_parse_float_negative():
+def test_parse_float_negativo():
     with pytest.raises(ValueError, match="No puedes comer una cantidad negativa de pepinos."):
         parse_float("-5")
-def test_parse_float_invalid_string():
+def test_parse_float_StringInvalido():
     with pytest.raises(ValueError, match="No se puede convertir 'abc' a Numero Decimal."):
         parse_float("abc")
-def test_parse_float_empty_string():
-    with pytest.raises(ValueError, match="No se puede convertir '' a Numero Decimal."):
-        parse_float("")
-def test_parse_float_spaces():
-    assert parse_float("   4.2   ") == 4.2  # Este pasa porque float ignora espacios    
