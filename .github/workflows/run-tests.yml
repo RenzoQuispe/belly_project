@@ -27,7 +27,7 @@ jobs:
       - name: Run pytest
         run: |
           source act9/bin/activate
-          pytest tests/
+          pytest -v tests/
 
       - name: Run behave - español tests
         run: |
