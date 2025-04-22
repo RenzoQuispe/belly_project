@@ -71,15 +71,27 @@ def parse_float(text):
     
     if value < 0:
         raise ValueError("No puedes comer una cantidad negativa de pepinos.")
+    if value > 1000:
+        raise ValueError("La cantidad de pepino no puede ser muy grande")    
     
     return value
 
 register_type(float=parse_float)
 
 # Steps
-@given('que he comido {cukes:float} pepinos')
+@given('que he comido {cukes} pepinos')
 def step_given_eaten_cukes(context, cukes):
-    context.belly.comer(cukes)
+    try:
+        cukes = float(cukes)
+        if cukes < 0:
+            raise ValueError("Cantidad negativa de pepinos no permitida.")
+        elif cukes > 1000:
+            raise ValueError("Demasiados pepinos, se puede comer menos de 100")
+        context.belly.comer(cukes)
+        context.error = None
+    except ValueError as e:
+        context.error = str(e)
+
 
 @when('espero {time_description}')
 def step_when_wait_time_description(context, time_description):
@@ -98,3 +110,13 @@ def step_then_belly_should_growl(context):
 @then('mi estómago no debería gruñir')
 def step_then_belly_should_not_growl(context):
     assert not context.belly.esta_gruñendo(), "Se esperaba que el estómago no gruñera, pero lo hizo."
+
+@then('deberia ocurrir un error de cantidad negativa.')
+def step_then_error_cantidad_negativa(context):
+    assert context.error is not None, "Se esperaba un error pero no ocurrió."
+    assert "negativa" in context.error, f"Mensaje de error inesperado: {context.error}"
+
+@then('deberia ocurrir un error de muchos pepinos.')
+def step_then_error_muchos_pepinos(context):
+    assert context.error is not None, "Se esperaba un error pero no ocurrió."
+    assert "Demasiados" in context.error or "muchos" in context.error, f"Mensaje de error inesperado: {context.error}"

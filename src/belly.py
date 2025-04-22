@@ -5,7 +5,9 @@ class Belly:
 
     def comer(self, pepinos):
         if pepinos < 0:
-            raise ValueError("No puedes comer una cantidad negativa de pepinos.")
+            raise ValueError("La cantidad de pepinos no puede ser negativa.")
+        elif pepinos > 1000:
+            raise ValueError("La cantidad de pepinos no puede ser mayor a 100.")
         self.pepinos_comidos += float(pepinos)
 
     def esperar(self, tiempo_en_horas):

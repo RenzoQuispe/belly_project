@@ -2,6 +2,21 @@
 Característica: Característica del estómago
 
   @español
+  Escenario: Comer 1000 pepinos y esperar 10 horas
+    Dado que he comido 1000 pepinos
+    Cuando espero 10 horas
+    Entonces mi estómago debería gruñir
+
+  @español
+  Escenario: Manejar una cantidad negativa de pepinos 
+    Dado que he comido -5 pepinos
+    Entonces deberia ocurrir un error de cantidad negativa.
+  @español
+  Escenario: Manejar una cantidad mayor a 100 de pepinos
+    Dado que he comido 1200 pepinos
+    Entonces deberia ocurrir un error de muchos pepinos.
+
+  @español
   Escenario: Comer pepinos y esperar un tiempo aleatorio
     Dado que he comido 25 pepinos
     Cuando espera un tiempo aleatorio entre 1 y 2 horas

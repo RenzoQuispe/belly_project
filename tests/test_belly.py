@@ -1,21 +1,20 @@
 import pytest
 from features.steps.steps import parsear_descripcion_tiempo, parse_float, tiempo_Aleatorio
 import logging
+import time
+from src.belly import Belly 
+
 # Pruebas para "parsear_descripcion_tiempo"
-@pytest.mark.parametrize("descripcion, valorEsperado", [
-    ("1 hora", 1.0),
-    ("media hora", 0.5),
-    ("una hora", 1.0),
-    ("dos horas", 2.0),
-    ("1 hora 30 minutos", 1.5),
-    ("1 hora y 3600 segundos", 2.0),
-    ("30 minutos", 0.5),
-    ("90 minutos", 1.5),
-    ("1 hora 45 segundos", 1.0125),
-])
-def test_parsear_descripcion_tiempo(descripcion, valorEsperado):
-    resultado = parsear_descripcion_tiempo(descripcion)
-    assert resultado == valorEsperado
+def test_parsear_descripcion_tiempo():
+    assert parsear_descripcion_tiempo("1 hora") == 1.0
+    assert parsear_descripcion_tiempo("media hora") == 0.5
+    assert parsear_descripcion_tiempo("una hora") == 1.0
+    assert parsear_descripcion_tiempo("dos horas") == 2.0
+    assert parsear_descripcion_tiempo("1 hora 30 minutos") == 1.5
+    assert parsear_descripcion_tiempo("1 hora y 3600 segundos") == 2.0
+    assert parsear_descripcion_tiempo("30 minutos") == 0.5
+    assert parsear_descripcion_tiempo("90 minutos") == 1.5
+    assert parsear_descripcion_tiempo("1 hora 45 segundos") == 1.0125
 
 # Pruebas para "parse_float"
 def test_parse_float():
@@ -25,15 +24,36 @@ def test_parse_float():
 def test_parse_float_negativo():
     with pytest.raises(ValueError, match="No puedes comer una cantidad negativa de pepinos."):
         parse_float("-5")
+    with pytest.raises(ValueError, match="No puedes comer una cantidad negativa de pepinos."):
+        parse_float("-10.5")    
 def test_parse_float_StringInvalido():
     with pytest.raises(ValueError, match="No se puede convertir 'abc' a Numero Decimal."):
         parse_float("abc")
 
 # Prueba para "tiempo_Aleatorio" - usamos seed fija(22)
 def test_tiempo_aleatorio():
+    print(f"test_tiempo_aleatorio:")
     assert tiempo_Aleatorio(1,2) == 1
     assert tiempo_Aleatorio(0,8) == 2
     assert tiempo_Aleatorio(3,10) == 5
     assert tiempo_Aleatorio(0,2) == 0
+
+# Prueba para medir el tiempo de ejecución de comer 1000 pepinos y esperar 10 horas
+def test_escenario_tiempo_ejecucion():
+    belly = Belly()
+
+    tiempoInicio = time.time()  
+
+    belly.comer(1000)  
+    belly.esperar(10)  
+
+    tiempoFinal = time.time()  
+    tiempoEjecucion = tiempoFinal - tiempoInicio  
+
+    print(f"test_escenario_tiempo_ejecucion Tiempo de ejecución: {tiempoEjecucion} segundos")
+
+    # Verificamos que el tiempo de ejecución es menor a 1 segundo
+    assert tiempoEjecucion < 1, f"El tiempo de ejecución es demasiado largo: {tiempoEjecucion} segundos"
+
 
 
