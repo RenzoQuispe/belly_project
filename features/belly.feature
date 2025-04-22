@@ -1,6 +1,16 @@
 # language: es
-
 Característica: Característica del estómago
+
+  @español
+  Escenario: Comer pepinos y esperar un tiempo aleatorio
+    Dado que he comido 25 pepinos
+    Cuando espera un tiempo aleatorio entre 1 y 2 horas
+    Entonces mi estómago no debería gruñir
+  @español
+  Escenario: Comer pepinos y esperar un tiempo aleatorio
+    Dado que he comido 25 pepinos
+    Cuando espera un tiempo aleatorio entre 0 y 8 horas
+    Entonces mi estómago debería gruñir
 
   @ingles
   Escenario: Esperar usando horas en inglés

@@ -1,5 +1,5 @@
 import pytest
-from features.steps.steps import parsear_descripcion_tiempo, parse_float
+from features.steps.steps import parsear_descripcion_tiempo, parse_float, tiempo_Aleatorio
 
 # Pruebas para "parsear_descripcion_tiempo"
 @pytest.mark.parametrize("descripcion, valorEsperado", [
@@ -28,3 +28,12 @@ def test_parse_float_negativo():
 def test_parse_float_StringInvalido():
     with pytest.raises(ValueError, match="No se puede convertir 'abc' a Numero Decimal."):
         parse_float("abc")
+
+# Prueba para "tiempo_Aleatorio" - usamos seed fija(22)
+def test_tiempo_aleatorio():
+    assert tiempo_Aleatorio(1,2) == 1
+    assert tiempo_Aleatorio(0,8) == 2
+    assert tiempo_Aleatorio(3,10) == 5
+    assert tiempo_Aleatorio(0,2) == 0
+
+

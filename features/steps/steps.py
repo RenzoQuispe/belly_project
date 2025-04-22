@@ -1,5 +1,7 @@
 from behave import given, when, then, register_type
 import re
+import random
+
 
 # Función para convertir palabras numéricas a números
 def convertir_palabra_a_numero(palabra):
@@ -52,6 +54,13 @@ def parsear_descripcion_tiempo(descripcion):
     else:
         raise ValueError(f"No se pudo interpretar la descripción del tiempo: {descripcion}")
 
+# Funcion para parsear dos numeros y devolver uno aleatorio, usa seed fija 
+def tiempo_Aleatorio(inicio, fin):
+    random.seed(22)  # ← SEED FIJA aquí, sin necesidad de pasarla como parámetro
+    horas = random.randint(inicio, fin)
+    print(f"tiempo aleatorio: {horas} horas")
+    return horas
+
 # Registrar tipo flotante para el paso
 def parse_float(text):
     try:
@@ -75,6 +84,11 @@ def step_given_eaten_cukes(context, cukes):
 def step_when_wait_time_description(context, time_description):
     total_time_in_hours = parsear_descripcion_tiempo(time_description)
     context.belly.esperar(total_time_in_hours)
+
+@when('espera un tiempo aleatorio entre {inicio:d} y {fin:d} horas')
+def step_when_wait_time_aleatorio(context, inicio, fin):
+    tiempoAleatorio = tiempo_Aleatorio(inicio,fin)
+    context.belly.esperar(tiempoAleatorio)
 
 @then('mi estómago debería gruñir')
 def step_then_belly_should_growl(context):
