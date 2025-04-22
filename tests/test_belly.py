@@ -1,6 +1,6 @@
 import pytest
 from features.steps.steps import parsear_descripcion_tiempo, parse_float, tiempo_Aleatorio
-
+import logging
 # Pruebas para "parsear_descripcion_tiempo"
 @pytest.mark.parametrize("descripcion, valorEsperado", [
     ("1 hora", 1.0),

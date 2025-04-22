@@ -1,6 +1,7 @@
 from behave import given, when, then, register_type
 import re
 import random
+import logging
 
 
 # Función para convertir palabras numéricas a números
