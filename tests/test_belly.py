@@ -4,8 +4,18 @@ import logging
 import time
 from src.belly import Belly 
 
+# test gruñir
+def test_gruñir():
+    belly = Belly()
+    belly.comer(15)
+    belly.esperar(2)
+    print(f"Comer 15 pepino y esperamos 2 horas. Esta gruñendo: {belly.esta_gruñendo()}")
+    assert belly.esta_gruñendo() == True
+
 # Pruebas para "parsear_descripcion_tiempo"
 def test_parsear_descripcion_tiempo():
+    assert parsear_descripcion_tiempo("1 hora, 30 minutos y 45 segundos") == 1.5125
+    assert parsear_descripcion_tiempo("1 hora ; 30 minutos ; 45 segundos") == 1.5125
     assert parsear_descripcion_tiempo("1 hora") == 1.0
     assert parsear_descripcion_tiempo("media hora") == 0.5
     assert parsear_descripcion_tiempo("una hora") == 1.0

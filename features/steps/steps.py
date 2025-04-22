@@ -30,6 +30,8 @@ def convertir_palabra_a_numero(palabra):
 def parsear_descripcion_tiempo(descripcion):
     descripcion = descripcion.strip('"').lower()
     descripcion = descripcion.replace('y', ' ')
+    descripcion = descripcion.replace(',', ' ')
+    descripcion = descripcion.replace(';', ' ')
     descripcion = descripcion.strip()
 
     if descripcion in ['media hora', 'half hour']:
