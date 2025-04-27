@@ -65,5 +65,11 @@ def test_escenario_tiempo_ejecucion():
     # Verificamos que el tiempo de ejecución es menor a 1 segundo
     assert tiempoEjecucion < 1, f"El tiempo de ejecución es demasiado largo: {tiempoEjecucion} segundos"
 
+# Test ejercicio10
+def test_pepinos_restantes():
+    belly = Belly()
+    belly.comer(15)
+    assert belly.pepinos_comidos == 15    
+
 
 

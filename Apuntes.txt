@@ -1,0 +1,24 @@
+Dentro de cada paso Red-Green-Refactor(ciclo de trabajo de TDD), tus tests siguen AAA:
+RED:
+Escribes un test siguiendo Arrange-Act-Assert:
+Preparas datos (Arrange).
+Ejecutas la acción (Act).
+Afirmas el resultado esperado (Assert).
+El test falla (porque aún no existe el código).
+GREEN:
+Escribes el código mínimo que pase el test.
+REFACTOR:
+Limpias el código (y también a veces limpias el test para que siga bien organizado en AAA).
+
+
+
+En BDD el flujo es un poco más amplio porque primero defines escenarios de comportamiento (tipo "historias de usuario"), pero igual:
+-Cada paso del escenario ("Given-When-Then") se implementa como código, y cada prueba implementada internamente sigue AAA.
+-Al implementar el paso "When el usuario crea una cuenta", tu código de test también hace:
+    Arrange (prepara los datos del usuario),
+    Act (llama al servicio de registro),
+    Assert (verifica que el usuario esté creado).
+Y luego, puedes aplicar una mini Red-Green-Refactor a nivel de escenario:
+-Primero escribes el escenario (falla).
+-Luego haces que pase.
+-Después mejoras el código del sistema o los steps de Cucumber, Behave, etc.

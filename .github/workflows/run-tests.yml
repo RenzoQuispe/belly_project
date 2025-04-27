@@ -29,6 +29,11 @@ jobs:
           source act9/bin/activate
           pytest -s tests/
 
+      - name: Run pytest Coverage
+        run: |
+            source act9/bin/activate
+            pytest --cov tests/
+
       - name: Run behave - español tests
         run: |
           source act9/bin/activate

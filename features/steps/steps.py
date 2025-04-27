@@ -94,7 +94,6 @@ def step_given_eaten_cukes(context, cukes):
     except ValueError as e:
         context.error = str(e)
 
-
 @when('espero {time_description}')
 def step_when_wait_time_description(context, time_description):
     total_time_in_hours = parsear_descripcion_tiempo(time_description)
@@ -122,3 +121,9 @@ def step_then_error_cantidad_negativa(context):
 def step_then_error_muchos_pepinos(context):
     assert context.error is not None, "Se esperaba un error pero no ocurrió."
     assert "Demasiados" in context.error or "muchos" in context.error, f"Mensaje de error inesperado: {context.error}"
+
+@then('deberia haber comido {pepinos} pepinos')
+def step_cuantos_pepinos_comi(context, pepinos):
+    actual = context.belly.pepinos_comidos
+    assert actual == float(pepinos), f"Se esperaban {pepinos} pepinos, pero se han comido {actual}."
+    

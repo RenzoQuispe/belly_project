@@ -99,12 +99,15 @@ Característica: Característica del estómago
     Dado que he comido 25 pepinos
     Cuando espero "dos horas y treinta minutos"
     Entonces mi estómago debería gruñir
-  
+
   @español
-  Escenario: test gruñir basico
+  Escenario: Saber cuántos pepinos he comido
     Dado que he comido 15 pepinos
-    Cuando espero 2 horas
-    Entonces mi estómago debería gruñir 
+    Entonces deberia haber comido 15 pepinos  
 
-
+  @español
+  Escenario: Verificar que el estómago gruñe tras comer suficientes pepinos y esperar
+  Dado que he comido 20 pepinos
+  Cuando espero 2 horas
+  Entonces mi estómago debería gruñir
 
