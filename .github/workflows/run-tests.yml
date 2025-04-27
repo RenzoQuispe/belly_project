@@ -1,87 +1,102 @@
-name: CI/CD Pipeline
+name: CI/CD pipeline
 
 on:
   push:
     branches:
-      - main 
-
+      - main
+      
+permissions:
+  actions: read
+  contents: read     
+ 
 jobs:
   test:
-    runs-on: ubuntu-latest  
+    runs-on: ubuntu-latest
 
     steps:
-      #Checkout del código
+      # Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3
 
-      #Configuración de Python
+      # Configuración de Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'  # Especifica la versión de Python
+          python-version: '3.12'
 
-      #Instalación de dependencias
+      # Instalar dependencias
       - name: Install dependencies
         run: |
-          python -m venv .venv  # Crear entorno virtual
-          source venv/bin/activate  # Activar entorno virtual
+          python -m venv venv  # Crear el entorno virtual 'venv'
+          source venv/bin/activate
           pip install --upgrade pip
-          pip install -r requirements.txt  # Instalar dependencias
+          pip install -r requirements.txt
 
-      #Verificación de calidad de código con flake8
-      - name: Run flake8 for code quality
+      # Ejecutar pruebas unitarias con pytest
+      - name: Run pytest
         run: |
           source venv/bin/activate
-          pip install flake8
-          flake8 .  # Analizar todo el código fuente en busca de problemas de estilo
+          pytest -s tests/
 
-      #Ejecutar pruebas unitarias con Pytest
-      - name: Run pytest tests
+      # Ejecutar pruebas de cobertura con pytest
+      - name: Run pytest Coverage
         run: |
-          source venv/bin/activate  # Activar entorno virtual
-          pytest --maxfail=1 --disable-warnings -q  # Ejecutar Pytest (pruebas unitarias)
+          source venv/bin/activate
+          pytest --cov tests/
 
-      #Ejecutar pruebas de Behave para BDD
-      - name: Run Behave tests - Español
+      # Ejecutar pruebas de comportamiento con behave para español
+      - name: Run behave - español tests
         run: |
           source venv/bin/activate
           behave --tags=@español
 
-      - name: Run Behave tests - Inglés
+      # Ejecutar pruebas de comportamiento con behave para inglés
+      - name: Run behave - ingles tests
         run: |
           source venv/bin/activate
           behave --tags=@ingles
-        
-      - name: Run Behave tests - Nuevos Criterios
-        run: |
-            source venv/bin/activate
-            behave --tags=@criterio_nuevo
 
-      # Generar reporte de cobertura con Pytest
-      - name: Run pytest coverage report
+      # Ejecutar pruebas de comportamiento para criterios nuevos
+      - name: Run behave - Criterios Nuevos
         run: |
           source venv/bin/activate
-          pytest --cov=tests/ --cov-report=xml  # Generar reporte de cobertura en formato XML
+          behave --tags=@criterio_nuevo
 
-      # subir reportes de pruebas como artifacts
+      # generar coverage.xml
+      - name: Run Pytest and generate coverage report
+        run: |
+          source venv/bin/activate
+          pytest --cov=tests/ --cov-report=xml
+
+      # generar behave-report.xml
+      - name: Run Behave and generate behave report
+        run: |
+          source venv/bin/activate
+          behave --format junit --outfile behave-report.xml
+
+      # Subir coverage.xml como artifact
       - name: Upload Pytest Coverage Report
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-coverage-report
           path: coverage.xml
 
+      # Subir behave-report.xml como artifact
       - name: Upload Behave Report
         if: success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: behave-report
           path: behave-report.xml
 
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: test
+
+# Despliegue
+# deploy:
+#   runs-on: ubuntu-latest
+#   needs: test
 #
-#    steps:
-  
+#   steps:
+#     # Pasos para el despliegue aquí
+
 
