@@ -2,4 +2,3 @@ behave
 pytest
 pytest-cov
 flake8
-behave-junit

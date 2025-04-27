@@ -72,7 +72,7 @@ jobs:
       - name: Run Behave and generate behave report
         run: |
           source venv/bin/activate
-          behave --format junit --outfile behave-report.xml
+          behave --format json --outfile behave-report.json
 
       # Subir coverage.xml como artifact
       - name: Upload Pytest Coverage Report
@@ -88,7 +88,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: behave-report
-          path: behave-report.xml
+          path: behave-report.json
 
 
 # Despliegue
