@@ -1,45 +1,87 @@
-name: Run Pytest and Behave
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
+      - main 
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
 
     steps:
+      #Checkout del código
       - name: Checkout code
         uses: actions/checkout@v3
 
+      #Configuración de Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.12'  # Especifica la versión de Python
 
+      #Instalación de dependencias
       - name: Install dependencies
         run: |
-          python -m venv act9
-          source act9/bin/activate
+          python -m venv .venv  # Crear entorno virtual
+          source venv/bin/activate  # Activar entorno virtual
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt  # Instalar dependencias
 
-      - name: Run pytest
+      #Verificación de calidad de código con flake8
+      - name: Run flake8 for code quality
         run: |
-          source act9/bin/activate
-          pytest -s tests/
+          source venv/bin/activate
+          pip install flake8
+          flake8 .  # Analizar todo el código fuente en busca de problemas de estilo
 
-      - name: Run pytest Coverage
+      #Ejecutar pruebas unitarias con Pytest
+      - name: Run pytest tests
         run: |
-            source act9/bin/activate
-            pytest --cov tests/
+          source venv/bin/activate  # Activar entorno virtual
+          pytest --maxfail=1 --disable-warnings -q  # Ejecutar Pytest (pruebas unitarias)
 
-      - name: Run behave - español tests
+      #Ejecutar pruebas de Behave para BDD
+      - name: Run Behave tests - Español
         run: |
-          source act9/bin/activate
+          source venv/bin/activate
           behave --tags=@español
 
-      - name: Run behave - ingles tests
+      - name: Run Behave tests - Inglés
         run: |
-          source act9/bin/activate
+          source venv/bin/activate
           behave --tags=@ingles
+        
+      - name: Run Behave tests - Nuevos Criterios
+        run: |
+            source venv/bin/activate
+            behave --tags=@criterio_nuevo
+
+      # Generar reporte de cobertura con Pytest
+      - name: Run pytest coverage report
+        run: |
+          source venv/bin/activate
+          pytest --cov=tests/ --cov-report=xml  # Generar reporte de cobertura en formato XML
+
+      # subir reportes de pruebas como artifacts
+      - name: Upload Pytest Coverage Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-coverage-report
+          path: coverage.xml
+
+      - name: Upload Behave Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: behave-report
+          path: behave-report.xml
+
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: test
+#
+#    steps:
+  
+

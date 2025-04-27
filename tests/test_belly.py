@@ -3,7 +3,26 @@ from features.steps.steps import parsear_descripcion_tiempo, parse_float, tiempo
 import logging
 import time
 from src.belly import Belly 
+from unittest.mock import MagicMock
 
+def test_belly_with_mocked_clock():
+    # Creamos un reloj simulado que siempre devolverá el mismo valor
+    clock = MagicMock()
+    clock.return_value = 10000  # Valor fijo para el tiempo
+
+    belly = Belly(clock_service=clock)
+    belly.comer(15)  # Comemos 15 pepinos
+    belly.esperar(2)  # Esperamos 2 horas
+
+    assert belly.pepinos_comidos == 15
+    assert belly.esta_gruñendo() 
+
+# Test predecir Gruñido - Problema12
+def test_estomago_predecir_gruñido():
+    belly = Belly()
+    belly.comer(12)
+    belly.esperar(1.5)
+    assert belly.esta_gruñendo() == True
 # test gruñir
 def test_gruñir():
     belly = Belly()
@@ -16,7 +35,7 @@ def test_gruñir():
 def test_parsear_descripcion_tiempo():
     assert parsear_descripcion_tiempo("1 hora, 30 minutos y 45 segundos") == 1.5125
     assert parsear_descripcion_tiempo("1 hora ; 30 minutos ; 45 segundos") == 1.5125
-    assert parsear_descripcion_tiempo("1 hora") == 1.0
+    assert parsear_descripcion_tiempo("2 hora") == 2.0
     assert parsear_descripcion_tiempo("media hora") == 0.5
     assert parsear_descripcion_tiempo("una hora") == 1.0
     assert parsear_descripcion_tiempo("dos horas") == 2.0

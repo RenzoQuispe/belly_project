@@ -37,6 +37,13 @@ def parsear_descripcion_tiempo(descripcion):
     if descripcion in ['media hora', 'half hour']:
         return 0.5
 
+    # 👇 Aquí agregamos una detección rápida de casos como "1.5 horas"
+    horas_decimal = re.compile(r'^(\d+(?:\.\d+)?)\s*(horas?|hours?)$')
+    match_decimal = horas_decimal.fullmatch(descripcion)
+    if match_decimal:
+        return float(match_decimal.group(1))
+
+    # Si no es decimal simple, usar el patrón normal
     pattern = re.compile(
         r'(?:(\w+|\d+(?:\.\d+)?)\s*(?:horas?|hours?))?\s*'
         r'(?:(\w+|\d+(?:\.\d+)?)\s*(?:minutos?|minutes?))?\s*'
@@ -56,7 +63,6 @@ def parsear_descripcion_tiempo(descripcion):
         return hours + (minutes / 60) + (seconds / 3600)
     else:
         raise ValueError(f"No se pudo interpretar la descripción del tiempo: {descripcion}")
-
 # Funcion para parsear dos numeros y devolver uno aleatorio, usa seed fija 
 def tiempo_Aleatorio(inicio, fin):
     random.seed(22)  # ← SEED FIJA aquí, sin necesidad de pasarla como parámetro
@@ -104,6 +110,10 @@ def step_when_wait_time_aleatorio(context, inicio, fin):
     tiempoAleatorio = tiempo_Aleatorio(inicio,fin)
     context.belly.esperar(tiempoAleatorio)
 
+@when('pregunto cuántos pepinos más puedo comer')    
+def pasar(context):
+    pass 
+
 @then('mi estómago debería gruñir')
 def step_then_belly_should_growl(context):
     assert context.belly.esta_gruñendo(), "Se esperaba que el estómago gruñera, pero no lo hizo."
@@ -126,4 +136,7 @@ def step_then_error_muchos_pepinos(context):
 def step_cuantos_pepinos_comi(context, pepinos):
     actual = context.belly.pepinos_comidos
     assert actual == float(pepinos), f"Se esperaban {pepinos} pepinos, pero se han comido {actual}."
-    
+@then('debería decirme que puedo comer {pepinos} pepinos más')    
+def cuantos_pepinos_puedo_comer_antes_de_que_el_estomago_gruña(context,pepinos):
+    pepinos_puedo_comer = 10.0-float(context.belly.pepinos_comidos)
+    assert float(pepinos)==pepinos_puedo_comer, f"Se esperaba que se puede comer {pepinos_puedo_comer} antes de que gruñera el estomago."    

@@ -1,7 +1,8 @@
 class Belly:
-    def __init__(self):
+    def __init__(self,clock_service=None):
         self.pepinos_comidos = 0.0
         self.tiempo_esperado = 0
+        self.clock_service = clock_service 
 
     def comer(self, pepinos):
         if pepinos < 0:
